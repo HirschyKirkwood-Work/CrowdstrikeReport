@@ -49,7 +49,7 @@ class FalconInfo:
                         # print(hostname, falcon_user, andrewID_dict[falcon_user])
                         andrewID = self.dsp_data_dict[hostname]
                         department = self.andrewID_dict[andrewID].replace('"','')
-                        outfile.write(f"{hostname},{andrewID},{last_seen},{department}\n")
+                        outfile.write(f"{hostname},{andrewID},{last_seen[:10]},{department}\n")
                     
 if __name__ == '__main__':
     falcon = FalconInfo()
