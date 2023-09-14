@@ -17,6 +17,7 @@ python3 .\falcon_info.py
 ```
 Note: You should be able to just right-click run it on either OS as well as long as the needed files are in your same directory.
 ## Setup
+All names can be changed in the [final line](./falcon_info.py) where the `falcon.process_info` function is called.
 ### Export CSV from ABR
 Default filename value: dsp_users_and_machine.csv
 
