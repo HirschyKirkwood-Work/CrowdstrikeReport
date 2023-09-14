@@ -7,7 +7,7 @@ Linux/Mac
 git clone https://github.com/HirschyKirkwood-Work/CrowdstrikeReport.git
 cd CrowdstrikeReport
 chmod +x ./falcon_info.py
-./
+./falcon_info.py
 ```
 Windows
 ```
