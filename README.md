@@ -35,8 +35,12 @@ Default Filename value: falconusersandgroups.csv
 
 Format: `AndrewID,Given Name,Department`
 
-### Set Export file
+### Set Active Users Export file
 
 Default Filename value: active_users.csv
 
 This file is your generated output.
+
+### Set Export "Inactive Devices" file
+
+Default Filename Value: inactive_machines.csv
