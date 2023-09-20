@@ -45,7 +45,8 @@ class FalconInfo:
         self.get_falconinfo(falcon_path)
         with open(outpath, 'w') as outfile:
             outfile.write("Hostname,AndrewID,Last Seen,Department\n")
-
+        with open(inactive_out, 'w') as inactive:
+            inactive.write("Hostname,AndrewID,Department\n")
         with open(outpath, 'a') as outfile:
             with open(inactive_out, "a") as inactive:
             # Read file 1 and append the desired information to outpath
@@ -53,18 +54,14 @@ class FalconInfo:
                     # print(f"Hostname: {hostname}\nAndrewID: {andrewID}")
 
                     # # Check if dsp_hostname matches hostname and dsp_andrewid is in andrewID_dict
-                    if hostname in self.falcon_data_dict:
-                    #     andrewID = self.dsp_data_dict[hostname]
-                        if andrewID in self.andrewID_dict:
-                            department = self.andrewID_dict[andrewID].replace('"','')
-                            last_seen = self.falcon_data_dict[hostname]
-                            outfile.write(f"{hostname},{andrewID},{last_seen[:10]},{department}\n")
-                    else: #TODO Figure out generating a consistent "Inactive Machines" list
-                    #     print(f"Host requested: {hostname}")
-                        if andrewID in self.andrewID_dict:
-                            department = self.andrewID_dict[andrewID].replace('"','')
-                            # last_seen = self.falcon_data_dict[hostname]
-                            inactive.write(f"{hostname},{andrewID},{department}\n")
+                    if hostname in self.falcon_data_dict and andrewID in self.andrewID_dict:
+                        department = self.andrewID_dict[andrewID].replace('"','')
+                        last_seen = self.falcon_data_dict[hostname]
+                        outfile.write(f"{hostname},{andrewID},{last_seen[:10]},{department}\n")
+                    elif andrewID in self.andrewID_dict:
+                        department = self.andrewID_dict[andrewID].replace('"','')
+                        # last_seen = self.falcon_data_dict[hostname]
+                        inactive.write(f"{hostname},{andrewID},{department}\n")
                         # print(f"{andrewID}: {hostname} not in Falcon")
 
                     
