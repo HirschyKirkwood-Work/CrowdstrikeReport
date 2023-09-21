@@ -62,7 +62,7 @@ class FalconInfo:
                     # Write users who don't have computers on record w/ DSP
                 for andrewID, department in self.andrewID_dict.items():
                     if andrewID not in self.dsp_data_dict.values():
-                        inactive.write(f"{andrewID},{department},Not A Customer or no machine on SLA\n")
+                        inactive.write(f"Not A Customer or no machine on SLA,{andrewID},{department}\n")
                     
 if __name__ == '__main__':
     falcon = FalconInfo()
