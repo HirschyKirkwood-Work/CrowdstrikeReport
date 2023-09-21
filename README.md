@@ -21,7 +21,7 @@ All names can be changed in the [final line](./falcon_info.py) where the `falcon
 ### Export CSV from ABR
 Default filename value: dsp_users_and_machine.csv
 
-Format: Default. If you have any manual entries to add, make sure to have the hostnames in column 0 (Letter A) and andrewIDs in column 18 (Letter S) at the very bottom.
+Format: Default. Full data, comma separated. NOT SEMI! If you have any manual entries to add, make sure to have the hostnames in column 0 (Letter A) and andrewIDs in column 18 (Letter S) at the very bottom.
 
 ### Export CSV from Crowdstrike
 
