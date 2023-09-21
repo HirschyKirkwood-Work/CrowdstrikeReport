@@ -49,21 +49,20 @@ class FalconInfo:
             inactive.write("Hostname,AndrewID,Department\n")
         with open(outpath, 'a') as outfile:
             with open(inactive_out, "a") as inactive:
-            # Read file 1 and append the desired information to outpath
                 for hostname, andrewID in self.dsp_data_dict.items():
-                    # print(f"Hostname: {hostname}\nAndrewID: {andrewID}")
-
-                    # # Check if dsp_hostname matches hostname and dsp_andrewid is in andrewID_dict
+                    # Check if dsp_hostname matches hostname and dsp_andrewid is in andrewID_dict
                     if hostname in self.falcon_data_dict and andrewID in self.andrewID_dict:
                         department = self.andrewID_dict[andrewID].replace('"','')
                         last_seen = self.falcon_data_dict[hostname]
                         outfile.write(f"{hostname},{andrewID},{last_seen[:10]},{department}\n")
-                    elif andrewID in self.andrewID_dict:
+                    # Write users with computer who aren't in Falcon
+                    elif andrewID in self.andrewID_dict and hostname:
                         department = self.andrewID_dict[andrewID].replace('"','')
-                        # last_seen = self.falcon_data_dict[hostname]
                         inactive.write(f"{hostname},{andrewID},{department}\n")
-                        # print(f"{andrewID}: {hostname} not in Falcon")
-
+                    # Write users who don't have computers on record w/ DSP
+                for andrewID, department in self.andrewID_dict.items():
+                    if andrewID not in self.dsp_data_dict.values():
+                        inactive.write(f"{andrewID},{department},Not A Customer or no machine on SLA\n")
                     
 if __name__ == '__main__':
     falcon = FalconInfo()
