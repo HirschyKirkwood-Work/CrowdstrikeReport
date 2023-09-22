@@ -9,6 +9,7 @@ class FalconInfo:
         self.dsp_data_dict = {}
         self.falcon_data_dict = {}
         self.inactive_machines = {}
+        self.self_managed = {}
 
 # Read file 2 and store andrewID and department
     def get_ldapinfo(self,pth:str):
@@ -34,6 +35,14 @@ class FalconInfo:
                 falcon_last_seen = columns[1]
                 self.falcon_data_dict[falcon_hostname] = falcon_last_seen
 
+    def get_self_managed(self, pth: str):
+        with open(pth, 'r') as file69:
+            for line in file69:
+                columns = line.strip().split(',')
+                falcon_hostname = columns[0]
+                falcon_last_seen = columns[1]
+                self.self_managed[falcon_hostname] = falcon_last_seen
+
 # Read file 3 and store dsp_hostname and dsp_andrewid
     def get_dspinfo(self, pth: str):
         with open(pth, 'r') as file3:
@@ -52,10 +61,11 @@ class FalconInfo:
                 self.dsp_data_dict[dsp_hostname]["hostname"] = dsp_hostname
                 self.dsp_data_dict[dsp_hostname]["last_seen"] = dsp_last_seen
 
-    def process_info(self, dsp_infopath: str, ldap_infopath: str, falcon_path:str, outpath: str, inactive_out: str):
+    def process_info(self, dsp_infopath: str, ldap_infopath: str, falcon_path:str, outpath: str, inactive_out: str, self_managed: str):
         self.get_dspinfo(dsp_infopath)
         self.get_ldapinfo(ldap_infopath)
         self.get_falconinfo(falcon_path)
+        self.get_self_managed(self_managed)
         with open(outpath, 'w') as outfile:
             outfile.write("Hostname,AndrewID,Last Seen,Department\n")
         with open(inactive_out, 'w') as inactive:
@@ -69,10 +79,18 @@ class FalconInfo:
                         department = self.andrewID_dict[andrewID['andrewID']].replace('"','')
                         last_seen = self.falcon_data_dict[hostname]
                         outfile.write(f"{hostname},{andrewID['andrewID']},{last_seen[:10]},{department}\n")
-                    # Write users with computer who aren't in Falcon
+                    # Write users with computer who aren't in the right SID in Falcon
+                    elif hostname in self.self_managed and andrewID["andrewID"] in self.andrewID_dict:
+                        department = self.andrewID_dict[andrewID['andrewID']].replace('"','')
+                        last_seen = self.self_managed[hostname]
+                        inactive.write(f"{hostname},{andrewID['andrewID']},{last_seen[:10]},{department},They Used the Self-Managed SID\n")
+                    # Users who do not show up with their machine in Falcon.
                     elif andrewID['andrewID'] in self.andrewID_dict and hostname:
                         department = self.andrewID_dict[andrewID['andrewID']].replace('"','')
                         inactive.write(f"{hostname},{andrewID['andrewID']},{department},{andrewID['last_seen']}\n")
+                    # Users who are signed into a computer w/ Falcon, but don't appear in the Falcon Groupers
+                    elif hostname in self.falcon_data_dict.keys() and andrewID['andrewID'] not in self.andrewID_dict.keys():
+                        outfile.write(f"{hostname},{andrewID['andrewID']},{last_seen[:10]},Not in Falcon Grouper but still has Falcon installed.\n")
                     # else:# Non-Falcon users
                     #     print(andrewID['andrewID'], hostname)
                 # Write users who don't have computers on record w/ DSP
@@ -82,4 +100,4 @@ class FalconInfo:
                     
 if __name__ == '__main__':
     falcon = FalconInfo()
-    falcon.process_info("dsp_users_and_machine.csv", "falconusersandgroups.csv", "falconexport.csv", "active_users.csv", "inactive_machines.csv")
+    falcon.process_info("dsp_users_and_machine.csv", "falconusersandgroups.csv", "falconexport.csv", "active_users.csv", "inactive_machines.csv", "self_managed.csv")
