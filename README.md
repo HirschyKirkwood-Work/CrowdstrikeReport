@@ -38,6 +38,8 @@ Default Filename value: falconexport.csv
 
 Format: Default.
 
+Note: *As of 10/2/23, something about the CSV export from Crowdstrike has changed and screwed up everything about it. There are newlines where their shouldn't be and it's totally borked. Solution I found was to just open it in Excel, remove everything but columns A and B, and save as CSV again.*
+
 ### Export CSV from Crowdstrike of Self-Managed SID
 
 Default Filename value: self_managed.csv
