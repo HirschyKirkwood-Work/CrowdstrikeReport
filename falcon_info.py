@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-
 
 # Initialize dictionaries to store data from file 2 and file 3
 class FalconInfo:
@@ -22,7 +20,6 @@ class FalconInfo:
                     department = columns[2]
                     if department == "":
                         department = "No LDAP info"
-
                 except:
                     department = "No LDAP info"
                 if andrewID != "andrewid" and len(andrewID) <= 8:
@@ -57,9 +54,9 @@ class FalconInfo:
 
                 # Check if the andrewid is already in the dictionary
                 if dsp_hostname not in self.dsp_data_dict:
-                    self.dsp_data_dict[
-                        dsp_hostname
-                    ] = {}  # Create a new dictionary if not exists
+                    self.dsp_data_dict[dsp_hostname] = (
+                        {}
+                    )  # Create a new dictionary if not exists
 
                 # Add or update data for the andrewid
                 self.dsp_data_dict[dsp_hostname]["andrewID"] = dsp_andrewid
@@ -126,6 +123,7 @@ class FalconInfo:
                         hostname in self.falcon_data_dict.keys()
                         and andrewID["andrewID"] not in self.andrewID_dict.keys()
                     ):
+                        last_seen = self.self_managed[hostname]
                         outfile.write(
                             f"{hostname},{andrewID['andrewID']},{last_seen[:10]},Not in Falcon Grouper but still has Falcon installed.\n"
                         )
